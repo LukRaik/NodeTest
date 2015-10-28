@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; float:left;}
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      canvas {border: 10px red solid}
+    </style>
+  </head>
+  <body>
+    <canvas width="1000" height="800" id="simple_sketch"></canvas>
+  </body>
+  <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="http://intridea.github.io/sketch.js/lib/sketch.js"></script>
+  <script>
+   $(document).ready(function(){
+    $('#simple_sketch').sketch();
+   })
+  
+  
+	var socket = io();
+	
+	socket.on('chat message', function(msg){
+    
+		$('#messages li:last-child').append($('<li>').text(msg));
+	});
+  
+	socket.on('typing-start',function(username){
+    $('#writters').append("<div id='typing-start-"+username +"'>"+username+" piszę.  </div>");
+    
+		
+	});
+	socket.on('typing-stop',function(username){
+		$('#typing-start-'+username).remove();
+		
+	});
+	
+  </script>
+</html>
